@@ -1,0 +1,160 @@
+<html>
+    <head>
+        <title>login form</title>
+        <style>
+            .c1{
+                color:rgb(37, 6, 67);
+                height: 600px;
+                width: 1000px;
+                background-color: rgb(190, 185, 185);
+                margin-left: 230px;
+                margin-top: 60px;
+                justify-content: center;
+                display: flex;
+                border-radius: 20px;
+                font-size: 20px;
+
+            }
+            .p1{
+                height: 600px;
+                width: 500px;
+                background-color: rgb(255, 255, 255);
+                margin-top: 0px;
+                border-top-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+                
+            
+                
+            }
+            .c2{
+                height:600px;
+                width:500px;
+                background-color: rgb(68, 65, 65);
+                border-top-right-radius: 20px;
+                border-bottom-right-radius: 20px;
+                
+            }
+            .i1{
+                height:600px;
+                width:500px;
+                border-top-right-radius: 20px;
+                border-bottom-right-radius: 20px;
+            }
+            body{
+                background: linear-gradient(180deg, rgb(43, 12, 99) 0%, rgb(1, 1, 42) 100%);
+            }
+            #log{
+                margin-left: 20px;
+                margin-top: 40px;
+
+
+
+            }
+            #uname{
+                height: 40px;
+                width: 250px;
+                border-radius: 10px;
+                font-size: 15px;
+                
+            }
+            #pwd{
+                height: 40px;
+                width: 250px;
+                border-radius: 10px;
+                margin-left:3px
+               
+            }
+            button{
+                height: 40px;
+                width: 341px;
+               
+                background-color: rgb(47, 7, 74);
+                color: white;
+                margin-top: 15px;
+                border-radius: 10px;
+            }
+            h1{
+                color: rgb(47, 7, 74);
+                
+                margin-top: 50px;
+            }
+            #fo{
+                color: rgb(47, 7, 74);
+                font-size: 18px;
+                
+            }
+            .c4{
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                width: 400px;
+                height: 450px;
+                margin-top: 67px;
+                margin-left: 52px;
+                border-radius: 20px;
+                border: 1px solid rgb(47, 7, 74);
+                box-shadow: 8px 8px 16px 20px rgba(20, 3, 38, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                
+            }
+            #signup{
+                color: rgb(47, 7, 74);
+                font-size: 18px;
+                margin-top: 20px;
+                margin-left: 40px;
+            }
+            
+            
+        </style>
+    </head>
+    <body>
+        <div class="c1">
+            <div class="p1">
+            
+            <div class="c4">
+                <form id="log">
+            <h1>Login</h1>
+            <label>Username:</label>
+            <input type="text" id="uname" placeholder=" Enter your email"><br><br>
+            <label>Password:</label>
+            <input type="password" id="pwd" placeholder=" Enter your password"><br><br>
+            <p id="fo">forgot password?????</p>
+            <button type="submit">Login</button>
+             <p id="signup">Don't have an account?Sign up now </p>
+
+            
+        </form>
+       
+        <p id="msg"></p>
+
+            </div>
+        <script>
+        //    function Btn(){
+        //     document.getElementById("title").innerHTML="HELLO ABHISHEK";
+        //    }
+
+        document.getElementById("log").addEventListener("submit",function(event){
+            event.preventDefault();
+            // Add your form submission logic here
+            let uname=document.getElementById("uname").value;
+            let pwd=document.getElementById("pwd").value; 
+            if(uname=="abhi" && pwd=="1234"){
+                document.getElementById("msg").innerHTML="Login Successful";
+            } else {
+                document.getElementById("msg").innerHTML="Invalid username or password";
+            }
+        });   
+            
+        
+        
+        
+        </script>
+        
+
+
+
+        </div>
+        <div class="c2">
+            <img class="i1" src="./foundry-library-869061.jpg" alt="">
+        </div>
+        </div>
+        
+    </body>
+</html>
