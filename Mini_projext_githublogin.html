@@ -1,0 +1,229 @@
+ 
+<html> 
+<title>GitHub Login</title> 
+ 
+<style> 
+*{ 
+    margin:0; 
+    padding:0; 
+    box-sizing:border-box; 
+    font-family:Arial, sans-serif; 
+} 
+ 
+body{ 
+    background:#0d1117; 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    height:100vh; 
+    color:white; 
+} 
+ 
+.container{ 
+    width:400px;  
+
+ 
+    text-align:center; 
+} 
+ 
+.logo-container{ 
+    width:80px; 
+    height:80px; 
+    background:white; 
+    border-radius:50%; 
+    margin:0 auto 20px; 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+} 
+ 
+.logo{ 
+    width:50px; 
+    height:50px; 
+} 
+ 
+h1{ 
+    font-size:32px; 
+    margin-bottom:30px; 
+    font-weight:500; 
+} 
+ 
+.form-group{ 
+    text-align:left; 
+    margin-bottom:20px; 
+} 
+ 
+label{ 
+    display:block; 
+    font-size:16px; 
+    font-weight:bold; 
+    margin-bottom:8px; 
+} 
+ 
+input{ 
+    width:100%; 
+    padding:14px; 
+    background:#010409; 
+    border:1px solid #30363d; 
+    border-radius:6px; 
+    color:white; 
+    font-size:16px; 
+} 
+ 
+input:focus{ 
+    outline:none; 
+    border:1px solid #2f81f7; 
+ 
+ 
+} 
+ 
+.password-header{ 
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center; 
+    margin-bottom:8px; 
+} 
+ 
+.password-header a{ 
+    color:#2f81f7; 
+    text-decoration:none; 
+    font-size:14px; 
+} 
+ 
+.password-header a:hover{ 
+    text-decoration:underline; 
+} 
+ 
+.signin-btn{ 
+    width:100%; 
+    padding:14px; 
+    background:#238636; 
+    border:none; 
+    border-radius:6px; 
+    color:white; 
+    font-size:22px; 
+    font-weight:bold; 
+    cursor:pointer; 
+    margin-top:10px; 
+} 
+ 
+.signin-btn:hover{ 
+    background:#2ea043; 
+} 
+ 
+.divider{ 
+    display:flex; 
+    align-items:center; 
+    margin:25px 0; 
+    color:#8b949e; 
+} 
+ 
+.divider::before, 
+.divider::after{ 
+    content:""; 
+    flex:1; 
+    border-bottom:1px solid #30363d; 
+} 
+ 
+ 
+ 
+.divider span{ 
+    padding:0 15px; 
+    font-size:18px; 
+} 
+ 
+.social-btn{ 
+    width:100%; 
+    padding:14px; 
+    background:#21262d; 
+    border:1px solid #30363d; 
+    border-radius:6px; 
+    color:white; 
+    font-size:18px; 
+    cursor:pointer; 
+    margin-bottom:15px; 
+} 
+ 
+.social-btn:hover{ 
+    background:#30363d; 
+} 
+ 
+.footer{ 
+    margin-top:30px; 
+} 
+ 
+.footer p{ 
+    font-size:16px; 
+} 
+ 
+.footer a{ 
+    color:#2f81f7; 
+    text-decoration:none; 
+} 
+ 
+.footer a:hover{ 
+    text-decoration:underline; 
+} 
+ 
+.passkey{ 
+    margin-top:25px; 
+} 
+</style> 
+ 
+</head> 
+<body> 
+ 
+<div class="container"> 
+ 
+    <!-- GitHub Logo --> 
+    <div class="logo-container"> 
+
+ 
+        <img src="./github.png" alt="GitHub Logo" class="logo"> 
+    </div> 
+ 
+    <h1>Sign in to GitHub</h1> 
+ 
+    <div class="form-group"> 
+        <label>Username or email address</label> 
+        <input type="text" placeholder=""> 
+    </div> 
+ 
+    <div class="form-group"> 
+        <div class="password-header"> 
+            <label>Password</label> 
+            <a href="#">Forgot password?</a> 
+        </div> 
+ 
+        <input type="password" placeholder=""> 
+    </div> 
+ 
+    <button class="signin-btn">Sign in</button> 
+ 
+    <div class="divider"> 
+        <span>or</span> 
+    </div> 
+ 
+    <button class="social-btn"> 
+        Continue with Google 
+    </button> 
+ 
+    <button class="social-btn"> 
+        Continue with Apple 
+    </button> 
+ 
+    <div class="footer"> 
+        <p> 
+            New to GitHub? 
+            <a href="#">Create an account</a> 
+        </p> 
+ 
+        <div class="passkey"> 
+            <a href="#">Sign in with a passkey</a> 
+        </div> 
+    </div> 
+ 
+</div> 
+ 
+</body> 
+</html>
