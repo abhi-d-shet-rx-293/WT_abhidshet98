@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Feedback Form</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Custom variables & design tokens */
+        :root {
+            --bg-base: #f1f5f9; /* Soft slate gray */
+            --bg-surface: #ffffff; /* Clean white card */
+            --bg-input: #f8fafc; /* Very light slate input */
+            
+            --color-primary: #3b82f6; /* Premium royal blue */
+            --color-primary-hover: #2563eb;
+            --color-star: #fbbf24; /* Golden star rating */
+            
+            --text-main: #0f172a; /* Dark slate text */
+            --text-muted: #475569; /* Slate secondary */
+            --text-dim: #94a3b8; /* Slate placeholder */
+            
+            --color-danger: #ef4444; /* Alert red */
+            --color-success: #22c55e; /* Success green */
+            
+            --font-main: 'Outfit', sans-serif;
+            --font-title: 'Montserrat', sans-serif;
+            
+            --transition-smooth: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1rem;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 45%);
+        }
+
+        /* Centered Form Card */
+        .feedback-card {
+            background-color: var(--bg-surface);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+            border: 1px solid rgba(15, 23, 42, 0.04);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            background-color: var(--bg-input);
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            color: var(--text-main);
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            outline: none;
+            width: 100%;
+            transition: var(--transition-smooth);
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder {
+            color: var(--text-dim);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--color-primary);
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Input Validation Error Classes */
+        .form-input.invalid, .form-select.invalid, .form-textarea.invalid {
+            border-color: var(--color-danger);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.1);
+        }
+
+        .error-lbl {
+            font-size: 0.75rem;
+            color: var(--color-danger);
+            display: none;
+            font-weight: 500;
+        }
+
+        .form-input.invalid ~ .error-lbl,
+        .form-select.invalid ~ .error-lbl,
+        .form-textarea.invalid ~ .error-lbl {
+            display: block;
+        }
+
+        /* Interactive Star Rating Widget */
+        .rating-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.2rem;
+            flex-direction: row-reverse; /* Allows hover trick */
+            justify-content: flex-end;
+        }
+
+        .star-radio {
+            display: none;
+        }
+
+        .star-label {
+            font-size: 1.8rem;
+            color: #cbd5e1;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        /* Selection/Hover logic */
+        .star-radio:checked ~ .star-label,
+        .star-label:hover,
+        .star-label:hover ~ .star-label {
+            color: var(--color-star);
+        }
+
+        /* Grid Layout helper */
+        .grid-2-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 500px) {
+            .grid-2-col {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            background-color: var(--color-primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 1.1rem;
+            font-family: var(--font-main);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+            transition: var(--transition-smooth);
+            width: 100%;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Success Summary Screen */
+        .success-container {
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(34, 197, 94, 0.1);
+            color: var(--color-success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.2rem auto;
+            border: 2px solid var(--color-success);
+        }
+
+        .success-title {
+            font-family: var(--font-title);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .success-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .receipt-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.4rem;
+            text-align: left;
+            margin-bottom: 1.8rem;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.7rem;
+            font-size: 0.85rem;
+            border-bottom: 1px dashed rgba(15, 23, 42, 0.04);
+            padding-bottom: 0.5rem;
+        }
+
+        .receipt-row:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .receipt-row .lbl {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .receipt-row .val {
+            color: var(--text-main);
+            font-weight: 600;
+            text-align: right;
+            max-width: 60%;
+            word-break: break-word;
+        }
+
+        .btn-reset {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 0.85rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-reset:hover {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            border-color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="feedback-card">
+        
+        <!-- FEEDBACK INPUT FORM VIEW -->
+        <form id="feedback-form" novalidate>
+            <div class="card-header">
+                <h1 class="card-title">Online Feedback Form</h1>
+                <p class="card-subtitle">We value your input. Please fill out the form details below.</p>
+            </div>
+
+            <!-- 1) Reg no -->
+            <div class="form-group">
+                <label for="reg-no">Registration Number</label>
+                <input type="text" id="reg-no" class="form-input" placeholder="e.g. 232601" required>
+                <span class="error-lbl" id="err-reg">Please enter a valid Registration Number.</span>
+            </div>
+
+            <!-- 2) Student Name -->
+            <div class="form-group">
+                <label for="student-name">Student Name</label>
+                <input type="text" id="student-name" class="form-input" placeholder="e.g. Abhishek Dinesh Shet" required>
+                <span class="error-lbl" id="err-name">Please enter your name.</span>
+            </div>
+
+            <!-- Grid: Email & Phone -->
+            <div class="grid-2-col">
+                <!-- 3) Clg Email id -->
+                <div class="form-group">
+                    <label for="student-email">College Email ID</label>
+                    <input type="email" id="student-email" class="form-input" placeholder="e.g. student@alliance.edu.in" required>
+                    <span class="error-lbl" id="err-email">Please enter a valid email address.</span>
+                </div>
+
+                <!-- 4) Phn no -->
+                <div class="form-group">
+                    <label for="student-phone">Phone Number</label>
+                    <input type="tel" id="student-phone" class="form-input" placeholder="e.g. 9876543210" required>
+                    <span class="error-lbl" id="err-phone">Please enter a 10-digit phone number.</span>
+                </div>
+            </div>
+
+            <!-- Grid: Subject & Faculty -->
+            <div class="grid-2-col">
+                <!-- 5) Select Sub (Dropdown) -->
+                <div class="form-group">
+                    <label for="select-subject">Select Subject</label>
+                    <select id="select-subject" class="form-select" required>
+                        <option value="" disabled selected>Choose Subject...</option>
+                        <option value="Web Technologies">Web Technologies</option>
+                        <option value="Python Programming">Python Programming</option>
+                        <option value="Database Systems">Database Systems</option>
+                        <option value="Computer Networks">Computer Networks</option>
+                        <option value="Software Engineering">Software Engineering</option>
+                    </select>
+                    <span class="error-lbl" id="err-sub">Please select a subject.</span>
+                </div>
+
+                <!-- 6) About faculty (Dropdown) -->
+                <div class="form-group">
+                    <label for="select-faculty">About Faculty</label>
+                    <select id="select-faculty" class="form-select" required>
+                        <option value="" disabled selected>Choose Faculty...</option>
+                        <option value="Dr. Ramesh Kumar">Dr. Ramesh Kumar</option>
+                        <option value="Prof. Anitha Sen">Prof. Anitha Sen</option>
+                        <option value="Dr. David Miller">Dr. David Miller</option>
+                        <option value="Prof. Sarah Jenkins">Prof. Sarah Jenkins</option>
+                    </select>
+                    <span class="error-lbl" id="err-faculty">Please select a faculty member.</span>
+                </div>
+            </div>
+
+            <!-- 7) Each faculty rating (out of 5) -->
+            <div class="form-group">
+                <label>Faculty Rating (out of 5)</label>
+                <div class="rating-container">
+                    <input type="radio" name="rating" value="5" id="star-5" class="star-radio" required>
+                    <label for="star-5" class="star-label" title="5 Stars">&#9733;</label>
+
+                    <input type="radio" name="rating" value="4" id="star-4" class="star-radio">
+                    <label for="star-4" class="star-label" title="4 Stars">&#9733;</label>
+
+                    <input type="radio" name="rating" value="3" id="star-3" class="star-radio">
+                    <label for="star-3" class="star-label" title="3 Stars">&#9733;</label>
+
+                    <input type="radio" name="rating" value="2" id="star-2" class="star-radio">
+                    <label for="star-2" class="star-label" title="2 Stars">&#9733;</label>
+
+                    <input type="radio" name="rating" value="1" id="star-1" class="star-radio">
+                    <label for="star-1" class="star-label" title="1 Star">&#9733;</label>
+                </div>
+                <span class="error-lbl" id="err-rating" style="margin-top: 0.25rem;">Please select a rating.</span>
+            </div>
+
+            <!-- 8) Any Queries / Suggestions -->
+            <div class="form-group">
+                <label for="suggestions">Any Queries / Suggestions</label>
+                <textarea id="suggestions" class="form-textarea" rows="3" placeholder="Write your queries or suggestions here..."></textarea>
+            </div>
+
+            <!-- 9) Submit button -->
+            <button type="submit" class="btn-submit" id="submit-btn">
+                <span>Submit Feedback</span>
+            </button>
+        </form>
+
+        <!-- SUBMISSION SUCCESS SUMMARY VIEW -->
+        <div class="success-container" id="success-screen">
+            <div class="success-icon">&check;</div>
+            <h2 class="success-title">Feedback Submitted!</h2>
+            <p class="success-desc">Thank you for your feedback. Below is a summary of your submission.</p>
+
+            <div class="receipt-card">
+                <div class="receipt-row">
+                    <span class="lbl">Registration Number</span>
+                    <span class="val" id="sum-reg">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="lbl">Student Name</span>
+                    <span class="val" id="sum-name">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="lbl">Email ID</span>
+                    <span class="val" id="sum-email">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="lbl">Phone Number</span>
+                    <span class="val" id="sum-phone">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="lbl">Selected Subject</span>
+                    <span class="val" id="sum-sub">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="lbl">Faculty Reviewed</span>
+                    <span class="val" id="sum-faculty">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="lbl">Faculty Rating</span>
+                    <span class="val" id="sum-rating">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="lbl">Suggestions</span>
+                    <span class="val" id="sum-suggest">-</span>
+                </div>
+            </div>
+
+            <button type="button" class="btn-reset" id="reset-btn">Submit Another Feedback</button>
+        </div>
+
+    </div>
+
+    <!-- Script Interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Form & Display Elements
+            const formEl = document.getElementById('feedback-form');
+            const successScreenEl = document.getElementById('success-screen');
+            const resetBtn = document.getElementById('reset-btn');
+
+            // Inputs
+            const regInput = document.getElementById('reg-no');
+            const nameInput = document.getElementById('student-name');
+            const emailInput = document.getElementById('student-email');
+            const phoneInput = document.getElementById('student-phone');
+            const subjectInput = document.getElementById('select-subject');
+            const facultyInput = document.getElementById('select-faculty');
+            const suggestInput = document.getElementById('suggestions');
+
+            // Summary Displays
+            const sumReg = document.getElementById('sum-reg');
+            const sumName = document.getElementById('sum-name');
+            const sumEmail = document.getElementById('sum-email');
+            const sumPhone = document.getElementById('sum-phone');
+            const sumSub = document.getElementById('sum-sub');
+            const sumFaculty = document.getElementById('sum-faculty');
+            const sumRating = document.getElementById('sum-rating');
+            const sumSuggest = document.getElementById('sum-suggest');
+
+            // Form Submit event handler
+            formEl.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    // Collect entries and show screen
+                    sumReg.textContent = regInput.value.trim();
+                    sumName.textContent = nameInput.value.trim();
+                    sumEmail.textContent = emailInput.value.trim();
+                    sumPhone.textContent = phoneInput.value.trim();
+                    sumSub.textContent = subjectInput.value;
+                    sumFaculty.textContent = facultyInput.value;
+                    
+                    // Selected Rating
+                    const selectedRating = document.querySelector('input[name="rating"]:checked').value;
+                    sumRating.textContent = '★'.repeat(selectedRating) + '☆'.repeat(5 - selectedRating) + ` (${selectedRating}/5)`;
+                    
+                    // Suggestion
+                    const suggestionText = suggestInput.value.trim();
+                    sumSuggest.textContent = suggestionText ? suggestionText : 'None';
+
+                    // Toggle Views
+                    formEl.style.display = 'none';
+                    successScreenEl.style.display = 'block';
+                }
+            });
+
+            // Validation logic
+            const validateForm = () => {
+                let isValid = true;
+
+                // 1) Registration Number: Not empty
+                if (regInput.value.trim().length === 0) {
+                    regInput.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    regInput.classList.remove('invalid');
+                }
+
+                // 2) Student Name: Not empty
+                if (nameInput.value.trim().length === 0) {
+                    nameInput.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    nameInput.classList.remove('invalid');
+                }
+
+                // 3) Email ID: Basic regex pattern check
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(emailInput.value.trim())) {
+                    emailInput.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    emailInput.classList.remove('invalid');
+                }
+
+                // 4) Phone Number: 10 digit check
+                const phoneDigits = phoneInput.value.replace(/\D/g, '');
+                if (phoneDigits.length !== 10) {
+                    phoneInput.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    phoneInput.classList.remove('invalid');
+                }
+
+                // 5) Subject Dropdown select check
+                if (subjectInput.value === '') {
+                    subjectInput.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    subjectInput.classList.remove('invalid');
+                }
+
+                // 6) Faculty Dropdown select check
+                if (facultyInput.value === '') {
+                    facultyInput.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    facultyInput.classList.remove('invalid');
+                }
+
+                // 7) Rating selector check
+                const ratingChecked = document.querySelector('input[name="rating"]:checked');
+                const ratingErr = document.getElementById('err-rating');
+                if (!ratingChecked) {
+                    ratingErr.style.display = 'block';
+                    isValid = false;
+                } else {
+                    ratingErr.style.display = 'none';
+                }
+
+                return isValid;
+            };
+
+            // Real-time error removal on inputs focus change/typing
+            const setupLiveValidation = (inputEl, valFn) => {
+                inputEl.addEventListener('input', () => {
+                    if (valFn ? valFn(inputEl.value) : inputEl.value.trim().length > 0) {
+                        inputEl.classList.remove('invalid');
+                    }
+                });
+                inputEl.addEventListener('change', () => {
+                    if (valFn ? valFn(inputEl.value) : inputEl.value.trim().length > 0) {
+                        inputEl.classList.remove('invalid');
+                    }
+                });
+            };
+
+            setupLiveValidation(regInput);
+            setupLiveValidation(nameInput);
+            setupLiveValidation(emailInput, val => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim()));
+            setupLiveValidation(phoneInput, val => val.replace(/\D/g, '').length === 10);
+            setupLiveValidation(subjectInput, val => val !== '');
+            setupLiveValidation(facultyInput, val => val !== '');
+
+            // Star Rating select removes its validation error
+            document.querySelectorAll('input[name="rating"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.getElementById('err-rating').style.display = 'none';
+                });
+            });
+
+            // Reset/Submit another feedback click
+            resetBtn.addEventListener('click', () => {
+                // Clear fields
+                formEl.reset();
+                
+                // Clear validation errors
+                const inputs = [regInput, nameInput, emailInput, phoneInput, subjectInput, facultyInput];
+                inputs.forEach(inp => inp.classList.remove('invalid'));
+                document.getElementById('err-rating').style.display = 'none';
+
+                // Swap views back
+                successScreenEl.style.display = 'none';
+                formEl.style.display = 'block';
+            });
+        });
+    </script>
+
+</body>
+</html>
